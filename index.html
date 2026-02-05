@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valentine’s Invite 💘</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Floating hearts -->
+  <div class="hearts" aria-hidden="true"></div>
+
+  <main class="card">
+    <!-- Teddy decorations -->
+    <div class="teddies" aria-hidden="true">
+      <span class="teddy">🧸</span>
+      <span class="teddy">🧸</span>
+      <span class="teddy">🧸</span>
+    </div>
+
+    <!-- Screen 1: Name -->
+    <section id="screenName" class="screen active">
+      <h1>Hiii 💗</h1>
+      <p class="subtitle">Before we start… what’s your name?</p>
+
+      <div class="inputRow">
+        <input id="nameInput" type="text" placeholder="Type your name… (e.g., Kimmy)" maxlength="20" />
+        <button id="startBtn" class="btn primary">Continue ✨</button>
+      </div>
+
+      <p class="tiny">Tip: press Enter 😊</p>
+    </section>
+
+    <!-- Screen 2: Valentine Question -->
+    <section id="screenAsk" class="screen">
+      <h1 id="askTitle">Will you be my Valentine? 💘</h1>
+      <p class="subtitle">No pressure… but also yes pressure 😭👉👈</p>
+
+      <div class="btnRow">
+        <button id="yesBtn" class="btn primary">Yes 😍</button>
+        <button id="noBtn" class="btn ghost">No 🙃</button>
+      </div>
+
+      <p id="hint" class="tiny"></p>
+    </section>
+
+    <!-- Screen 3: Celebration + Plans -->
+    <section id="screenYay" class="screen">
+      <h1 id="yayTitle">YAAAY!! 💖</h1>
+      <p class="subtitle">Ok bestie… we’re officially a Valentine’s duo 🧸💞</p>
+
+      <div class="choices">
+        <p class="question">What would you want for the day?</p>
+
+        <div class="choiceGrid">
+          <button class="chip" data-choice="Cute date + food 🍓🍰">Cute date + food 🍓🍰</button>
+          <button class="chip" data-choice="Flowers + chocolates 💐🍫">Flowers + chocolates 💐🍫</button>
+          <button class="chip" data-choice="Movie night + cuddles 🎬🫶">Movie night + cuddles 🎬🫶</button>
+          <button class="chip" data-choice="Picnic + selfies 🌸📸">Picnic + selfies 🌸📸</button>
+          <button class="chip" data-choice="Surprise me 😌✨">Surprise me 😌✨</button>
+        </div>
+
+        <div class="inputRow">
+          <input id="customWish" type="text" placeholder="Or type your own wish…" maxlength="60" />
+          <button id="saveWishBtn" class="btn primary">Save 💾</button>
+        </div>
+
+        <div class="resultBox">
+          <p class="tiny">Your answer:</p>
+          <p id="finalWish" class="finalWish">—</p>
+        </div>
+
+        <button id="restartBtn" class="btn ghost">Start again 🔁</button>
+      </div>
+
+      <div class="confetti" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
