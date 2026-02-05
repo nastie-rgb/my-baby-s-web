@@ -1,0 +1,194 @@
+:root{
+  --pink1:#ffb6d5;
+  --pink2:#ffd1e8;
+  --pink3:#ff5ea8;
+  --ink:#3a2140;
+  --card:#ffffffcc;
+  --shadow: 0 20px 60px rgba(0,0,0,.15);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--ink);
+  background: radial-gradient(circle at top, var(--pink2), var(--pink1));
+  overflow:hidden;
+}
+
+.card{
+  width:min(520px, 92vw);
+  background: var(--card);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,.6);
+  border-radius: 24px;
+  padding: 26px 22px 20px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+h1{
+  margin: 8px 0 6px;
+  font-size: 2.1rem;
+  letter-spacing: .2px;
+}
+
+.subtitle{
+  margin: 0 0 18px;
+  opacity: .85;
+  line-height: 1.35;
+}
+
+.tiny{
+  font-size: .85rem;
+  opacity: .75;
+  margin-top: 14px;
+}
+
+.screen{ display:none; }
+.screen.active{ display:block; }
+
+.inputRow{
+  display:flex;
+  gap:10px;
+  margin-top: 10px;
+}
+
+input{
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 2px solid rgba(255,255,255,.9);
+  outline: none;
+  font-size: 1rem;
+  background: rgba(255,255,255,.75);
+}
+
+input:focus{
+  border-color: rgba(255,94,168,.65);
+  box-shadow: 0 0 0 4px rgba(255,94,168,.15);
+}
+
+.btnRow{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.btn{
+  border:0;
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-size: 1rem;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  user-select:none;
+}
+
+.btn:active{ transform: scale(.98); }
+
+.primary{
+  background: linear-gradient(135deg, var(--pink3), #ff86c3);
+  color: white;
+  box-shadow: 0 12px 22px rgba(255,94,168,.25);
+}
+
+.ghost{
+  background: rgba(255,255,255,.7);
+  color: var(--pink3);
+  border: 2px solid rgba(255,94,168,.35);
+}
+
+.btn:hover{
+  transform: translateY(-1px);
+}
+
+.teddies{
+  display:flex;
+  justify-content: space-between;
+  position:absolute;
+  left:18px;
+  right:18px;
+  top: -18px;
+  pointer-events:none;
+  opacity: .95;
+}
+
+.teddy{
+  font-size: 2.2rem;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,.15));
+}
+
+.choices{
+  margin-top: 10px;
+}
+
+.question{
+  font-weight: 700;
+  margin: 8px 0 12px;
+}
+
+.choiceGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+
+@media (max-width: 420px){
+  .choiceGrid{ grid-template-columns: 1fr; }
+}
+
+.chip{
+  border: 2px solid rgba(255,94,168,.25);
+  background: rgba(255,255,255,.7);
+  padding: 10px 12px;
+  border-radius: 16px;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+  font-size: .95rem;
+  text-align:left;
+}
+
+.chip:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 18px rgba(255,94,168,.12);
+}
+
+.resultBox{
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.75);
+  border: 2px dashed rgba(255,94,168,.35);
+}
+
+.finalWish{
+  margin: 6px 0 0;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #7a1b4a;
+}
+
+/* Floating hearts background */
+.hearts{
+  position: fixed;
+  inset: 0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+/* Confetti */
+.confetti{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  border-radius: 24px;
+}
