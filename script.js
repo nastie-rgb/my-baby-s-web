@@ -1,11 +1,15 @@
-const screenName = document.getElementById("screenName");
-const screenAsk  = document.getElementById("screenAsk");
-const screenYay  = document.getElementById("screenYay");
+const screenLogin = document.getElementById("screenLogin");
+const screenAsk   = document.getElementById("screenAsk");
+const screenYay   = document.getElementById("screenYay");
+const screenSad   = document.getElementById("screenSad");
 
-const nameInput = document.getElementById("nameInput");
-const startBtn  = document.getElementById("startBtn");
+const userInput = document.getElementById("userInput");
+const passInput = document.getElementById("passInput");
+const loginBtn  = document.getElementById("loginBtn");
+const loginError = document.getElementById("loginError");
 
 const askTitle = document.getElementById("askTitle");
+const askSubtitle = document.getElementById("askSubtitle");
 const yayTitle = document.getElementById("yayTitle");
 
 const yesBtn = document.getElementById("yesBtn");
@@ -18,19 +22,25 @@ const saveWishBtn = document.getElementById("saveWishBtn");
 const finalWish = document.getElementById("finalWish");
 const restartBtn = document.getElementById("restartBtn");
 
+const sadMsg = document.getElementById("sadMsg");
+const sadRestartBtn = document.getElementById("sadRestartBtn");
+
 const heartsLayer = document.querySelector(".hearts");
 const confettiLayer = document.querySelector(".confetti");
 
-let personName = "";
+const music = document.getElementById("bgMusic");
+
+let personName = "Naima";
+let noCount = 0;
 
 // ---------- helpers ----------
 function showScreen(which){
-  [screenName, screenAsk, screenYay].forEach(s => s.classList.remove("active"));
+  [screenLogin, screenAsk, screenYay, screenSad].forEach(s => s.classList.remove("active"));
   which.classList.add("active");
 }
 
-function cleanName(str){
-  return (str || "").trim().replace(/\s+/g, " ").slice(0, 20);
+function normalize(str){
+  return (str || "").trim().toLowerCase();
 }
 
 // ---------- hearts ----------
@@ -54,30 +64,53 @@ function spawnHeart(){
 
   setTimeout(() => heart.remove(), 6200);
 }
-
 setInterval(spawnHeart, 420);
 
-// ---------- start ----------
-function begin(){
-  personName = cleanName(nameInput.value);
-  if(!personName){
-    nameInput.focus();
-    nameInput.placeholder = "Please type your name 😭💗";
-    return;
-  }
-  askTitle.textContent = `${personName}, will you be my Valentine? 💘`;
-  hint.textContent = `Be honest ${personName}… but also choose wisely 😌`;
-  showScreen(screenAsk);
+// ---------- music ----------
+function startMusic(){
+  music.play().catch(() => {});
 }
 
-startBtn.addEventListener("click", begin);
-nameInput.addEventListener("keydown", (e) => {
-  if(e.key === "Enter") begin();
-});
+// ---------- LOGIN ----------
+function login(){
+  const u = normalize(userInput.value);
+  // password can be anything; hint is in placeholder
+  if(u !== "naima"){
+    loginError.textContent = "Access denied 😭 This page is for Naima only 💗";
+    // tiny playful shake
+    screenLogin.animate(
+      [{ transform: "translateX(0)" }, { transform: "translateX(-8px)" }, { transform: "translateX(8px)" }, { transform: "translateX(0)" }],
+      { duration: 260 }
+    );
+    return;
+  }
 
-// ---------- NO button dodges ----------
+  loginError.textContent = "";
+  personName = "Naima";
+  noCount = 0;
+  resetNoButton();
+
+  askTitle.textContent = `${personName}, will you be my Valentine? 💘`;
+  askSubtitle.textContent = `No pressure… but also yes pressure 😭👉👈`;
+  hint.textContent = `Be honest ${personName}… but please be gentle 😌`;
+
+  showScreen(screenAsk);
+  startMusic();
+}
+
+loginBtn.addEventListener("click", login);
+passInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
+userInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
+
+// ---------- NO button logic (4 tries) ----------
+function resetNoButton(){
+  noBtn.style.position = "";
+  noBtn.style.left = "";
+  noBtn.style.top = "";
+}
+
 function dodgeNo(){
-  const padding = 20;
+  const padding = 16;
   const maxX = window.innerWidth - noBtn.offsetWidth - padding;
   const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
@@ -89,8 +122,41 @@ function dodgeNo(){
   noBtn.style.top  = `${y}px`;
 }
 
-noBtn.addEventListener("mouseover", dodgeNo);
-noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); dodgeNo(); });
+const noMessages = [
+  "Eii 😭 first No? Are you sure?",
+  "Second No?? my heart is shaking 🥺",
+  "Third No… okay you’re testing me fr 😔",
+];
+
+function goHeartbreak(){
+  showScreen(screenSad);
+  sadMsg.textContent = `${personName}… I get it. But wow… that actually hurt. 💔`;
+}
+
+noBtn.addEventListener("click", () => {
+  noCount += 1;
+
+  if(noCount <= 3){
+    hint.textContent = noMessages[noCount - 1];
+    dodgeNo();
+    popConfetti(12);
+    return;
+  }
+
+  hint.textContent = "";
+  goHeartbreak();
+});
+
+// make it slippery while hovering only before 4th click
+noBtn.addEventListener("mouseover", () => {
+  if(noCount < 3) dodgeNo();
+});
+noBtn.addEventListener("touchstart", (e) => {
+  if(noCount < 3){
+    e.preventDefault();
+    dodgeNo();
+  }
+});
 
 // ---------- YES celebration ----------
 function popConfetti(amount = 70){
@@ -141,18 +207,25 @@ customWish.addEventListener("keydown", (e) => {
 });
 
 // ---------- restart ----------
-restartBtn.addEventListener("click", () => {
-  personName = "";
-  nameInput.value = "";
+function fullReset(){
+  personName = "Naima";
+  noCount = 0;
+
+  userInput.value = "";
+  passInput.value = "";
   customWish.value = "";
   finalWish.textContent = "—";
-  noBtn.style.position = "";
-  noBtn.style.left = "";
-  noBtn.style.top = "";
-  showScreen(screenName);
-  nameInput.focus();
-});
+  hint.textContent = "";
+  loginError.textContent = "";
 
-// Start on name screen
-showScreen(screenName);
-nameInput.focus();
+  resetNoButton();
+  showScreen(screenLogin);
+  userInput.focus();
+}
+
+restartBtn.addEventListener("click", fullReset);
+sadRestartBtn.addEventListener("click", fullReset);
+
+// Start on login screen
+showScreen(screenLogin);
+userInput.focus();
