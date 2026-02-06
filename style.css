@@ -3,7 +3,6 @@
   --pink2:#ffd1e8;
   --pink3:#ff5ea8;
   --ink:#3a2140;
-  --card:#ffffffcc;
   --shadow: 0 20px 60px rgba(0,0,0,.15);
 }
 
@@ -22,8 +21,8 @@ body{
 }
 
 .card{
-  width:min(520px, 92vw);
-  background: var(--card);
+  width:min(560px, 92vw);
+  background: rgba(255,255,255,.80);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255,255,255,.6);
   border-radius: 24px;
@@ -60,7 +59,7 @@ h1{
 }
 
 input{
-  flex: 1;
+  width: 100%;
   padding: 12px 14px;
   border-radius: 14px;
   border: 2px solid rgba(255,255,255,.9);
@@ -110,6 +109,8 @@ input:focus{
   transform: translateY(-1px);
 }
 
+.full{ width: 100%; margin-top: 12px; }
+
 .teddies{
   display:flex;
   justify-content: space-between;
@@ -126,21 +127,37 @@ input:focus{
   filter: drop-shadow(0 8px 10px rgba(0,0,0,.15));
 }
 
-.choices{
-  margin-top: 10px;
+/* Login */
+.loginBox{
+  background: rgba(255,255,255,.65);
+  border: 2px solid rgba(255,94,168,.18);
+  border-radius: 18px;
+  padding: 14px;
 }
 
-.question{
-  font-weight: 700;
-  margin: 8px 0 12px;
+.label{
+  display:block;
+  font-weight: 800;
+  margin: 10px 0 6px;
+  opacity: .9;
 }
+
+.error{
+  color: #a3134c;
+  font-weight: 700;
+  min-height: 18px;
+  margin: 10px 0 0;
+}
+
+/* Choices */
+.choices{ margin-top: 10px; }
+.question{ font-weight: 800; margin: 8px 0 12px; }
 
 .choiceGrid{
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap:10px;
 }
-
 @media (max-width: 420px){
   .choiceGrid{ grid-template-columns: 1fr; }
 }
@@ -155,7 +172,6 @@ input:focus{
   font-size: .95rem;
   text-align:left;
 }
-
 .chip:hover{
   transform: translateY(-1px);
   box-shadow: 0 12px 18px rgba(255,94,168,.12);
@@ -168,13 +184,22 @@ input:focus{
   background: rgba(255,255,255,.75);
   border: 2px dashed rgba(255,94,168,.35);
 }
-
 .finalWish{
   margin: 6px 0 0;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 1.05rem;
   color: #7a1b4a;
 }
+
+/* Heartbreak */
+.sadBox{
+  margin-top: 12px;
+  padding: 14px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.78);
+  border: 2px solid rgba(255,94,168,.18);
+}
+.sadText{ margin: 0; line-height: 1.5; }
 
 /* Floating hearts background */
 .hearts{
