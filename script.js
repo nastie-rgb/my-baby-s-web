@@ -1,34 +1,37 @@
+// ====== Screens ======
 const screenLogin = document.getElementById("screenLogin");
 const screenAsk   = document.getElementById("screenAsk");
 const screenYay   = document.getElementById("screenYay");
 const screenSad   = document.getElementById("screenSad");
 
-const userInput = document.getElementById("userInput");
-const passInput = document.getElementById("passInput");
-const loginBtn  = document.getElementById("loginBtn");
-const loginError = document.getElementById("loginError");
+// ====== Login fields ======
+const userInput   = document.getElementById("userInput");
+const passInput   = document.getElementById("passInput");
+const loginBtn    = document.getElementById("loginBtn");
+const loginError  = document.getElementById("loginError");
 
-const askTitle = document.getElementById("askTitle");
+// ====== Ask screen ======
+const askTitle    = document.getElementById("askTitle");
 const askSubtitle = document.getElementById("askSubtitle");
-const yayTitle = document.getElementById("yayTitle");
+const yesBtn      = document.getElementById("yesBtn");
+const noBtn       = document.getElementById("noBtn");
+const hint        = document.getElementById("hint");
 
-const yesBtn = document.getElementById("yesBtn");
-const noBtn  = document.getElementById("noBtn");
-const hint   = document.getElementById("hint");
+// ====== Yay screen ======
+const yayTitle     = document.getElementById("yayTitle");
+const chips        = document.querySelectorAll(".chip");
+const customWish   = document.getElementById("customWish");
+const saveWishBtn  = document.getElementById("saveWishBtn");
+const finalWish    = document.getElementById("finalWish");
+const restartBtn   = document.getElementById("restartBtn");
 
-const chips = document.querySelectorAll(".chip");
-const customWish = document.getElementById("customWish");
-const saveWishBtn = document.getElementById("saveWishBtn");
-const finalWish = document.getElementById("finalWish");
-const restartBtn = document.getElementById("restartBtn");
-
-const sadMsg = document.getElementById("sadMsg");
+// ====== Sad screen ======
+const sadMsg        = document.getElementById("sadMsg");
 const sadRestartBtn = document.getElementById("sadRestartBtn");
 
-const heartsLayer = document.querySelector(".hearts");
+// ====== Effects ======
 const confettiLayer = document.querySelector(".confetti");
-
-const music = document.getElementById("bgMusic");
+const music         = document.getElementById("bgMusic");
 
 let personName = "Naima";
 let noCount = 0;
@@ -43,123 +46,13 @@ function normalize(str){
   return (str || "").trim().toLowerCase();
 }
 
-// ---------- hearts ----------
-function spawnHeart(){
-  const heart = document.createElement("div");
-  heart.textContent = Math.random() > 0.15 ? "💖" : "💕";
-  heart.style.position = "absolute";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.bottom = "-40px";
-  heart.style.fontSize = (18 + Math.random() * 18) + "px";
-  heart.style.opacity = (0.55 + Math.random() * 0.45).toFixed(2);
-  heart.style.transform = `translateX(${(Math.random()*40-20).toFixed(0)}px)`;
-  heart.style.transition = "transform 6s linear, bottom 6s linear, opacity 6s linear";
-  heartsLayer.appendChild(heart);
-
-  requestAnimationFrame(() => {
-    heart.style.bottom = "110vh";
-    heart.style.transform += ` translateX(${(Math.random()*80-40).toFixed(0)}px)`;
-    heart.style.opacity = "0";
-  });
-
-  setTimeout(() => heart.remove(), 6200);
-}
-setInterval(spawnHeart, 420);
-
-// ---------- music ----------
 function startMusic(){
+  // Starts after user gesture (Login), so browsers usually allow it
   music.play().catch(() => {});
 }
 
-// ---------- LOGIN ----------
-function login(){
-  const u = normalize(userInput.value);
-  // password can be anything; hint is in placeholder
-  if(u !== "naima"){
-    loginError.textContent = "Access denied 😭 This page is for Naima only 💗";
-    screenLogin.animate(
-      [
-        { transform: "translateX(0)" },
-        { transform: "translateX(-8px)" },
-        { transform: "translateX(8px)" },
-        { transform: "translateX(0)" }
-      ],
-      { duration: 260 }
-    );
-    return;
-  }
-
-  loginError.textContent = "";
-  personName = "Naima";
-  noCount = 0;
-  resetNoButton();
-
-  askTitle.textContent = `${personName}, will you be my Valentine? 💘`;
-  askSubtitle.textContent = `No pressure… but also yes pressure 😭👉👈`;
-  hint.textContent = `Be honest ${personName}… but please be gentle 😌`;
-
-  showScreen(screenAsk);
-  startMusic();
-}
-
-loginBtn.addEventListener("click", login);
-passInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
-userInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
-
-// ---------- NO button logic (4 tries, CLICKABLE) ----------
-function resetNoButton(){
-  noBtn.style.position = "";
-  noBtn.style.left = "";
-  noBtn.style.top = "";
-}
-
-function dodgeNo(){
-  const padding = 16;
-  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-
-  const x = Math.max(padding, Math.random() * maxX);
-  const y = Math.max(padding, Math.random() * maxY);
-
-  noBtn.style.position = "fixed";
-  noBtn.style.left = `${x}px`;
-  noBtn.style.top  = `${y}px`;
-}
-
-const noMessages = [
-  "Eii 😭 first No? Are you sure?",
-  "Second No?? my heart is shaking 🥺",
-  "Third No… okay you’re testing me fr 😔",
-];
-
-function goHeartbreak(){
-  showScreen(screenSad);
-  sadMsg.textContent = `${personName}… I get it. But wow… that actually hurt. 💔`;
-}
-
-noBtn.addEventListener("click", () => {
-  noCount += 1;
-
-  if(noCount <= 3){
-    hint.textContent = noMessages[noCount - 1];
-
-    // Let her click NO, then move it away for the next try
-    dodgeNo();
-
-    // tiny sparkles for drama
-    popConfetti(10);
-    return;
-  }
-
-  // 4th click → heartbreak
-  hint.textContent = "";
-  goHeartbreak();
-});
-
-// IMPORTANT: No hover/touch dodging here — so she can click it.
-
-// ---------- YES celebration ----------
-function popConfetti(amount = 70){
+// ---------- confetti (optional, cute) ----------
+function popConfetti(amount = 60){
   for(let i=0; i<amount; i++){
     const p = document.createElement("div");
     p.style.position = "absolute";
@@ -184,6 +77,66 @@ function popConfetti(amount = 70){
   }
 }
 
+// ---------- LOGIN ----------
+function login(){
+  const u = normalize(userInput.value);
+
+  // Username must be Naima (case-insensitive). Password can be anything.
+  if(u !== "naima"){
+    loginError.textContent = "Access denied 😭 This page is for Naima only 💗";
+    // small shake
+    screenLogin.animate(
+      [{ transform:"translateX(0)" },{ transform:"translateX(-8px)" },{ transform:"translateX(8px)" },{ transform:"translateX(0)" }],
+      { duration: 260 }
+    );
+    return;
+  }
+
+  loginError.textContent = "";
+  personName = "Naima";
+  noCount = 0;
+
+  // IMPORTANT: keep NO button fixed and clickable (no moving, no position hacks)
+  noBtn.style.position = "";
+  noBtn.style.left = "";
+  noBtn.style.top = "";
+
+  askTitle.textContent = `${personName}, will you be my Valentine? 💘`;
+  askSubtitle.textContent = `No pressure… but also yes pressure 😭👉👈`;
+  hint.textContent = "";
+
+  showScreen(screenAsk);
+  startMusic();
+}
+
+loginBtn.addEventListener("click", login);
+userInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
+passInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
+
+// ---------- NO (stays in one position, functional) ----------
+const noMessages = [
+  "First no? 🥺 okay…",
+  "Second no?? my heart is shaking 💔",
+  "Third no… you’re really doing this to me 😭"
+];
+
+noBtn.addEventListener("click", () => {
+  noCount += 1;
+
+  // Keep the button where it is (do NOT move it)
+  // Just show escalating messages
+  if(noCount <= 3){
+    hint.textContent = noMessages[noCount - 1];
+    return;
+  }
+
+  // 4th click → heartbreak
+  hint.textContent = "";
+  sadMsg.textContent = `${personName}… I’ll respect it. But wow… that actually hurt. 💔`;
+  showScreen(screenSad);
+});
+
+// ---------- YES ----------
 yesBtn.addEventListener("click", () => {
   yayTitle.textContent = `YAAAY ${personName}!! 💖`;
   showScreen(screenYay);
@@ -197,28 +150,19 @@ function setWish(text){
   if(t) popConfetti(35);
 }
 
-chips.forEach(btn => {
-  btn.addEventListener("click", () => setWish(btn.dataset.choice));
-});
-
+chips.forEach(btn => btn.addEventListener("click", () => setWish(btn.dataset.choice)));
 saveWishBtn.addEventListener("click", () => setWish(customWish.value));
-customWish.addEventListener("keydown", (e) => {
-  if(e.key === "Enter") setWish(customWish.value);
-});
+customWish.addEventListener("keydown", (e) => { if(e.key === "Enter") setWish(customWish.value); });
 
 // ---------- restart ----------
 function fullReset(){
-  personName = "Naima";
   noCount = 0;
-
   userInput.value = "";
   passInput.value = "";
   customWish.value = "";
   finalWish.textContent = "—";
   hint.textContent = "";
   loginError.textContent = "";
-
-  resetNoButton();
   showScreen(screenLogin);
   userInput.focus();
 }
