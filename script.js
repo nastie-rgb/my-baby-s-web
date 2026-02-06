@@ -77,9 +77,13 @@ function login(){
   // password can be anything; hint is in placeholder
   if(u !== "naima"){
     loginError.textContent = "Access denied 😭 This page is for Naima only 💗";
-    // tiny playful shake
     screenLogin.animate(
-      [{ transform: "translateX(0)" }, { transform: "translateX(-8px)" }, { transform: "translateX(8px)" }, { transform: "translateX(0)" }],
+      [
+        { transform: "translateX(0)" },
+        { transform: "translateX(-8px)" },
+        { transform: "translateX(8px)" },
+        { transform: "translateX(0)" }
+      ],
       { duration: 260 }
     );
     return;
@@ -102,7 +106,7 @@ loginBtn.addEventListener("click", login);
 passInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
 userInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
 
-// ---------- NO button logic (4 tries) ----------
+// ---------- NO button logic (4 tries, CLICKABLE) ----------
 function resetNoButton(){
   noBtn.style.position = "";
   noBtn.style.left = "";
@@ -138,25 +142,21 @@ noBtn.addEventListener("click", () => {
 
   if(noCount <= 3){
     hint.textContent = noMessages[noCount - 1];
+
+    // Let her click NO, then move it away for the next try
     dodgeNo();
-    popConfetti(12);
+
+    // tiny sparkles for drama
+    popConfetti(10);
     return;
   }
 
+  // 4th click → heartbreak
   hint.textContent = "";
   goHeartbreak();
 });
 
-// make it slippery while hovering only before 4th click
-noBtn.addEventListener("mouseover", () => {
-  if(noCount < 3) dodgeNo();
-});
-noBtn.addEventListener("touchstart", (e) => {
-  if(noCount < 3){
-    e.preventDefault();
-    dodgeNo();
-  }
-});
+// IMPORTANT: No hover/touch dodging here — so she can click it.
 
 // ---------- YES celebration ----------
 function popConfetti(amount = 70){
