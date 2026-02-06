@@ -47,11 +47,10 @@ function normalize(str){
 }
 
 function startMusic(){
-  // Starts after user gesture (Login), so browsers usually allow it
   music.play().catch(() => {});
 }
 
-// ---------- confetti (optional, cute) ----------
+// ---------- confetti (optional) ----------
 function popConfetti(amount = 60){
   for(let i=0; i<amount; i++){
     const p = document.createElement("div");
@@ -81,10 +80,8 @@ function popConfetti(amount = 60){
 function login(){
   const u = normalize(userInput.value);
 
-  // Username must be Naima (case-insensitive). Password can be anything.
   if(u !== "naima"){
     loginError.textContent = "Access denied 😭 This page is for Naima only 💗";
-    // small shake
     screenLogin.animate(
       [{ transform:"translateX(0)" },{ transform:"translateX(-8px)" },{ transform:"translateX(8px)" },{ transform:"translateX(0)" }],
       { duration: 260 }
@@ -96,10 +93,12 @@ function login(){
   personName = "Naima";
   noCount = 0;
 
-  // IMPORTANT: keep NO button fixed and clickable (no moving, no position hacks)
+  // Ensure NO stays put and stays clickable
   noBtn.style.position = "";
   noBtn.style.left = "";
   noBtn.style.top = "";
+  noBtn.style.pointerEvents = "auto";
+  noBtn.style.touchAction = "manipulation"; // makes repeated taps work better on phones
 
   askTitle.textContent = `${personName}, will you be my Valentine? 💘`;
   askSubtitle.textContent = `No pressure… but also yes pressure 😭👉👈`;
@@ -113,28 +112,31 @@ loginBtn.addEventListener("click", login);
 userInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
 passInput.addEventListener("keydown", (e) => { if(e.key === "Enter") login(); });
 
-// ---------- NO (stays in one position, functional) ----------
+// ---------- NO (fixed position, works every time) ----------
 const noMessages = [
   "First no? 🥺 okay…",
   "Second no?? my heart is shaking 💔",
   "Third no… you’re really doing this to me 😭"
 ];
 
-noBtn.addEventListener("click", () => {
+function handleNoPress(e){
+  // On some phones, touch can be weird—this makes it reliable.
+  if (e) e.preventDefault();
+
   noCount += 1;
 
-  // Keep the button where it is (do NOT move it)
-  // Just show escalating messages
   if(noCount <= 3){
     hint.textContent = noMessages[noCount - 1];
     return;
   }
 
-  // 4th click → heartbreak
   hint.textContent = "";
   sadMsg.textContent = `${personName}… I’ll respect it. But wow… that actually hurt. 💔`;
   showScreen(screenSad);
-});
+}
+
+// Use pointerup for reliable repeated taps/clicks (works for mouse + touch)
+noBtn.addEventListener("pointerup", handleNoPress);
 
 // ---------- YES ----------
 yesBtn.addEventListener("click", () => {
