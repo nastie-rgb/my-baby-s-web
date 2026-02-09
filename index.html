@@ -4,23 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>For Kimmy ❤️</title>
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <!-- Subtle floating hearts -->
-  <div class="hearts" id="hearts"></div>
-
-  <div class="wrap">
-    <div class="card fade" id="app"></div>
+  <!-- Animated background layers -->
+  <div class="bg">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="sparkles" id="sparkles"></div>
   </div>
 
-  <!-- Your music (add song.mp3 in same folder) -->
-  <audio id="bgm" preload="auto"></audio>
+  <!-- App -->
+  <main class="wrap">
+    <section class="card" id="app"></section>
+  </main>
 
-  <!-- JS -->
+  <!-- Floating music chip -->
+  <button class="music-chip" id="musicChip" aria-label="Play music">
+    🎶 <span id="musicChipText">Play</span>
+  </button>
+
+  <!-- Audio -->
+  <audio id="bgm" preload="auto" playsinline loop></audio>
+
   <script src="script.js"></script>
 </body>
 </html>
