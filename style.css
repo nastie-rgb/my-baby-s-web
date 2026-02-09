@@ -1,19 +1,16 @@
 :root{
-  --pink:#ff4d6d;
-  --hot:#ff2d95;
-  --rose:#ff99ac;
-  --red:#ff1f3d;
-  --peach:#ffd1dc;
-  --plum:#7b2ff7;
-  --cyan:#2ff7d1;
+  --pink1:#ff4fa3;
+  --pink2:#ff69b4;
+  --pink3:#ff9ad5;
+  --pink4:#ffd1ea;
 
-  --card: rgba(255,255,255,.14);
-  --stroke: rgba(255,255,255,.22);
-  --text:#fff;
-  --muted: rgba(255,255,255,.80);
+  --card: rgba(255,255,255,.18);
+  --stroke: rgba(255,255,255,.28);
+  --text:#ffffff;
+  --muted: rgba(255,255,255,.82);
 
-  --shadow: 0 22px 70px rgba(0,0,0,.32);
-  --shadow2: 0 10px 30px rgba(0,0,0,.18);
+  --shadow: 0 22px 70px rgba(0,0,0,.22);
+  --shadow2: 0 10px 30px rgba(0,0,0,.16);
 }
 
 *{ box-sizing:border-box; }
@@ -29,49 +26,42 @@ body{
 /* Background */
 .bg{
   position:fixed; inset:0; z-index:-2;
-  background: radial-gradient(900px 600px at 15% 15%, rgba(255,255,255,.20), transparent 55%),
-              radial-gradient(700px 500px at 85% 10%, rgba(255,255,255,.15), transparent 55%),
-              linear-gradient(125deg, var(--red), var(--hot), var(--rose));
-  animation: hue 12s linear infinite;
-}
-@keyframes hue{
-  0%{ filter:hue-rotate(0deg); }
-  100%{ filter:hue-rotate(25deg); }
+  background:
+    radial-gradient(900px 600px at 15% 15%, rgba(255,255,255,.22), transparent 60%),
+    radial-gradient(700px 500px at 85% 10%, rgba(255,255,255,.14), transparent 55%),
+    linear-gradient(135deg, var(--pink1), var(--pink2), var(--pink3));
 }
 
-.blob{
+.glow{
   position:absolute;
   width:520px; height:520px;
-  border-radius: 50%;
-  filter: blur(40px);
+  border-radius:50%;
+  filter: blur(50px);
   opacity:.55;
-  mix-blend-mode: screen;
   animation: float 12s ease-in-out infinite;
 }
-.b1{ left:-120px; top:-140px; background: radial-gradient(circle at 30% 30%, var(--cyan), transparent 60%); }
-.b2{ right:-170px; top:120px; background: radial-gradient(circle at 30% 30%, var(--plum), transparent 60%); animation-duration: 14s; }
-.b3{ left:20%; bottom:-240px; background: radial-gradient(circle at 30% 30%, #fff, transparent 60%); animation-duration: 16s; opacity:.35; }
+.g1{ left:-140px; top:-160px; background: rgba(255,255,255,.35); }
+.g2{ right:-180px; top:120px; background: rgba(255,209,234,.75); animation-duration: 14s; }
+.g3{ left:18%; bottom:-240px; background: rgba(255,154,213,.55); animation-duration: 16s; }
 
 @keyframes float{
   0%,100%{ transform: translate(0,0) scale(1); }
-  50%{ transform: translate(30px,-22px) scale(1.08); }
+  50%{ transform: translate(34px,-24px) scale(1.08); }
 }
 
 /* Sparkles */
-.sparkles{
-  position:absolute; inset:0; pointer-events:none; z-index:-1;
-}
+.sparkles{ position:absolute; inset:0; pointer-events:none; z-index:-1; }
 .sparkle{
   position:absolute;
   width:6px; height:6px;
   border-radius:50%;
-  background: rgba(255,255,255,.7);
-  box-shadow: 0 0 16px rgba(255,255,255,.6);
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 0 16px rgba(255,255,255,.7);
   animation: twinkle 3.2s ease-in-out infinite;
 }
 @keyframes twinkle{
   0%,100%{ transform: scale(.6); opacity:.35; }
-  50%{ transform: scale(1.3); opacity:.95; }
+  50%{ transform: scale(1.35); opacity:.95; }
 }
 
 /* Layout */
@@ -84,10 +74,10 @@ body{
 }
 
 .card{
-  width:min(560px, 100%);
+  width:min(590px, 100%);
   background: var(--card);
   border: 1px solid var(--stroke);
-  border-radius: 26px;
+  border-radius: 28px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -99,54 +89,42 @@ body{
 .card::before{
   content:"";
   position:absolute; inset:-2px;
-  background: linear-gradient(135deg, rgba(255,255,255,.18), transparent 40%, rgba(255,255,255,.12));
+  background: linear-gradient(135deg, rgba(255,255,255,.20), transparent 45%, rgba(255,255,255,.10));
   pointer-events:none;
 }
 
 /* Header */
 .brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom: 10px;
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:10px;
 }
 .badge{
-  width:46px; height:46px;
-  border-radius: 18px;
-  background: rgba(255,255,255,.16);
-  border: 1px solid rgba(255,255,255,.25);
+  width:48px; height:48px;
+  border-radius:18px;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.28);
   box-shadow: var(--shadow2);
   display:grid; place-items:center;
 }
 .badge span{ font-size:20px; }
 
-h1{
-  margin:0;
-  font-size: 22px;
-  letter-spacing:.2px;
-}
-.sub{
-  margin-top: 5px;
-  color: var(--muted);
-  line-height:1.55;
-  font-size: 14.5px;
-}
+h1{ margin:0; font-size:22px; letter-spacing:.2px; }
+.sub{ margin-top:6px; color:var(--muted); line-height:1.55; font-size:14.5px; }
 
 .divider{
   height:1px;
-  background: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.20);
   margin: 14px 0 16px;
 }
 
 .pill{
   display:inline-flex;
-  gap:8px;
   align-items:center;
+  gap:8px;
   padding: 7px 11px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.22);
+  border: 1px solid rgba(255,255,255,.25);
   background: rgba(255,255,255,.10);
-  color: rgba(255,255,255,.88);
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -155,15 +133,15 @@ h1{
 .progress{
   height:10px;
   border-radius:999px;
-  border: 1px solid rgba(255,255,255,.22);
-  background: rgba(0,0,0,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08);
   overflow:hidden;
 }
 .progress > div{
   height:100%;
   width:0%;
   border-radius:999px;
-  background: linear-gradient(90deg, rgba(255,255,255,.75), rgba(255,255,255,.25));
+  background: linear-gradient(90deg, rgba(255,255,255,.85), rgba(255,255,255,.25));
   transition: width .35s ease;
 }
 
@@ -177,94 +155,60 @@ label{
 .hint{
   display:block;
   font-size: 12px;
-  color: rgba(255,255,255,.72);
+  color: rgba(255,255,255,.78);
   margin-top: 6px;
 }
 input{
   width:100%;
   padding: 12px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.26);
   background: rgba(255,255,255,.10);
   color:#fff;
   outline:none;
   font-size:15px;
 }
-input::placeholder{ color: rgba(255,255,255,.65); }
+input::placeholder{ color: rgba(255,255,255,.70); }
 input:focus{
-  border-color: rgba(255,255,255,.45);
+  border-color: rgba(255,255,255,.48);
   box-shadow: 0 0 0 4px rgba(255,255,255,.12);
 }
 
 /* Buttons */
-.actions{
-  display:flex;
-  gap:12px;
-  margin-top: 14px;
-}
-
+.actions{ display:flex; gap:12px; margin-top:14px; }
 button{
   appearance:none;
   border:none;
   cursor:pointer;
   border-radius: 18px;
   padding: 12px 14px;
-  font-weight: 750;
+  font-weight: 800;
   letter-spacing:.15px;
   color:#fff;
   background: rgba(255,255,255,.16);
-  border: 1px solid rgba(255,255,255,.22);
-  transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+  border: 1px solid rgba(255,255,255,.25);
+  transition: transform .12s ease, background .12s ease;
   width:100%;
 }
-button:hover{
-  background: rgba(255,255,255,.24);
-  transform: translateY(-1px);
-}
-button:active{ transform: translateY(0px) scale(.99); }
+button:hover{ background: rgba(255,255,255,.24); transform: translateY(-1px); }
+button:active{ transform: translateY(0) scale(.99); }
 
-.btn-yes{
-  background: linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.12));
-}
-.btn-no{
-  background: rgba(0,0,0,.18);
-}
+.btn-yes{ background: rgba(255,255,255,.20); }
+.btn-no{ background: rgba(0,0,0,.14); }
 
-.big-question{
-  font-size: 18px;
-  line-height: 1.55;
-  margin: 10px 0 10px;
-}
-
-.type{
-  white-space: pre-wrap;
-  line-height:1.7;
-  font-size: 15px;
-  color: rgba(255,255,255,.93);
-}
-
-.tiny{
-  margin-top: 10px;
-  color: rgba(255,255,255,.75);
-  font-size: 12.5px;
-  line-height:1.55;
-}
+.big-question{ font-size: 18px; line-height:1.55; margin: 10px 0 10px; }
+.type{ white-space: pre-wrap; line-height:1.7; font-size: 15px; color: rgba(255,255,255,.94); }
+.tiny{ margin-top: 10px; color: rgba(255,255,255,.80); font-size: 12.5px; line-height:1.55; }
 
 /* Options */
-.options{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:10px;
-  margin-top: 12px;
-}
+.options{ display:grid; grid-template-columns: 1fr; gap:10px; margin-top: 12px; }
 .option-btn{
   text-align:left;
   padding: 12px 14px;
   border-radius: 18px;
   background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.22);
+  border: 1px solid rgba(255,255,255,.24);
 }
-.option-btn strong{ font-weight: 800; }
 .option-btn:hover{ background: rgba(255,255,255,.22); }
 
 .reply{
@@ -272,13 +216,13 @@ button:active{ transform: translateY(0px) scale(.99); }
   padding: 10px 12px;
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.14);
-  color: rgba(255,255,255,.88);
+  background: rgba(0,0,0,.12);
+  color: rgba(255,255,255,.90);
   line-height: 1.55;
   font-size: 13.5px;
 }
 
-/* Choice grid at end */
+/* Final choices */
 .choice-grid{
   display:grid;
   grid-template-columns: 1fr;
@@ -292,10 +236,7 @@ button:active{ transform: translateY(0px) scale(.99); }
 
 /* Animations */
 .fade{ animation: fadeIn .35s ease both; }
-@keyframes fadeIn{
-  from{ opacity:0; transform: translateY(8px); }
-  to{ opacity:1; transform: translateY(0); }
-}
+@keyframes fadeIn{ from{ opacity:0; transform: translateY(8px); } to{ opacity:1; transform: translateY(0); } }
 .shake{ animation: shake .35s ease both; }
 @keyframes shake{
   0%{ transform: translateX(0); }
@@ -315,14 +256,14 @@ button:active{ transform: translateY(0px) scale(.99); }
   padding: 10px 12px;
   border-radius: 999px;
   box-shadow: var(--shadow2);
-  background: rgba(0,0,0,.22);
-  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.25);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display:flex;
   gap:8px;
   align-items:center;
-  font-weight:800;
+  font-weight:900;
 }
 
 /* Confetti */
@@ -337,12 +278,5 @@ button:active{ transform: translateY(0px) scale(.99); }
   animation: fall 1.25s linear forwards;
 }
 @keyframes fall{
-  to{
-    transform: translateY(110vh) rotate(540deg);
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .fade, .shake, .blob, .sparkle, .confetti{ animation:none !important; }
+  to{ transform: translateY(110vh) rotate(540deg); opacity: 0; }
 }
