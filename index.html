@@ -1,111 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Private Valentine Portal 💘</title>
+  <title>For Kimmy ❤️</title>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!-- Subtle floating hearts -->
+  <div class="hearts" id="hearts"></div>
 
-  <!-- Floating hearts -->
-  <div class="hearts" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="card fade" id="app"></div>
+  </div>
 
-  <main class="card">
-    <!-- Teddy decorations -->
-    <div class="teddies" aria-hidden="true">
-      <span class="teddy">🧸</span>
-      <span class="teddy">🧸</span>
-      <span class="teddy">🧸</span>
-    </div>
+  <!-- Your music (add song.mp3 in same folder) -->
+  <audio id="bgm" preload="auto"></audio>
 
-    <!-- Background music (starts on successful login click) -->
-    <audio id="bgMusic" loop preload="auto">
-      <source src="WhatsApp Audio 2026-02-06 at 09.08.40.mpeg" type="audio/mpeg">
-    </audio>
-
-    <!-- Screen 1: Login -->
-    <section id="screenLogin" class="screen active">
-      <h1>Private Login 💗</h1>
-      <p class="subtitle">This page is for someone special only 🧸</p>
-
-      <div class="loginBox">
-        <label class="label">Username</label>
-        <input id="userInput" type="text" placeholder="Enter username…" autocomplete="username" />
-
-        <label class="label">Password</label>
-        <input id="passInput" type="password" placeholder="Hint: our anniversary" autocomplete="current-password" />
-
-        <button id="loginBtn" class="btn primary full">Login ✨</button>
-        <p id="loginError" class="error tiny"></p>
-      </div>
-
-      <p class="tiny">Tip: press Enter 😊</p>
-    </section>
-
-    <!-- Screen 2: Valentine Question -->
-    <section id="screenAsk" class="screen">
-      <h1 id="askTitle">Will you be my Valentine? 💘</h1>
-      <p class="subtitle" id="askSubtitle">No pressure… but also yes pressure 😭👉👈</p>
-
-      <div class="btnRow">
-        <button id="yesBtn" class="btn primary">Yes 😍</button>
-        <button id="noBtn" class="btn ghost">No 🙃</button>
-      </div>
-
-      <p id="hint" class="tiny"></p>
-    </section>
-
-    <!-- Screen 3: Celebration + Plans -->
-    <section id="screenYay" class="screen">
-      <h1 id="yayTitle">YAAAY!! 💖</h1>
-      <p class="subtitle">Ok baby😍… we’re officially a Valentine’s duo 🧸💞</p>
-
-      <div class="choices">
-        <p class="question">What would you prefer for the day?</p>
-
-        <div class="choiceGrid">
-          <button class="chip" data-choice="Cute date + food 🍓🍰">Cute date + food 🍓🍰</button>
-          <button class="chip" data-choice="Flowers + chocolates 💐🍫">Flowers + chocolates 💐🍫</button>
-          <button class="chip" data-choice="Movie night + cuddles 🎬🫶">Movie night + cuddles 🎬🫶</button>
-          <button class="chip" data-choice="Picnic + selfies 🌸📸">Picnic + selfies 🌸📸</button>
-          <button class="chip" data-choice="Surprise me 😌✨">Surprise me 😌✨</button>
-        </div>
-
-        <div class="inputRow">
-          <input id="customWish" type="text" placeholder="Or type your own wish…" maxlength="60" />
-          <button id="saveWishBtn" class="btn primary">Save 💾</button>
-        </div>
-
-        <div class="resultBox">
-          <p class="tiny">Your answer:</p>
-          <p id="finalWish" class="finalWish">—</p>
-        </div>
-
-        <button id="restartBtn" class="btn ghost">Start again 🔁</button>
-      </div>
-
-      <div class="confetti" aria-hidden="true"></div>
-    </section>
-
-    <!-- Screen 4: Heartbreak -->
-    <section id="screenSad" class="screen">
-      <h1>Oh… 💔</h1>
-      <p class="subtitle" id="sadMsg">That one hurt more than I expected.</p>
-
-      <div class="sadBox">
-        <p class="sadText">
-          I’ll pretend I’m okay… but wow. I really meant it.<br/>
-          If you ever change your mind, you know where to find me.
-        </p>
-        <p class="tiny">— from someone who genuinely wanted you 🥺</p>
-      </div>
-
-      <button id="sadRestartBtn" class="btn ghost">Start again 🔁</button>
-    </section>
-
-  </main>
-
+  <!-- JS -->
   <script src="script.js"></script>
 </body>
 </html>
