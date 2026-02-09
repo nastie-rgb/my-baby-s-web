@@ -1,7 +1,7 @@
 // =========================
 // CONFIG
 // =========================
-const AUDIO_SRC = "song.mp3";         // MUST match exactly (case-sensitive)
+const AUDIO_SRC = "song.mpeg";         // MUST match exactly (case-sensitive)
 const USERNAME_REQUIRED = "tashia";   // username required
 
 // Q sets (options included)
