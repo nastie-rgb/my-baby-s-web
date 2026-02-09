@@ -1,50 +1,64 @@
 // =========================
 // CONFIG
 // =========================
-const AUDIO_SRC = "song.mp3"; // Put your song as song.mp3 in the same folder
-const USERNAME_REQUIRED = "tashia";
+const AUDIO_SRC = "song.mp3";         // MUST match exactly (case-sensitive)
+const USERNAME_REQUIRED = "tashia";   // username required
 
-// Questions before GF ask
-const preGFQuestions = [
-  "Quick one… do you believe people meet for a reason?",
-  "Do you think vibes can speak louder than words?",
-  "Do you like surprises… even the small ones?",
-  "Have you ever met someone who made ordinary days feel lighter?",
-  "If a person consistently makes you smile… does that mean something?",
-  "Okay… one more 😅 Do you think love should be chosen on purpose?"
+// Q sets (options included)
+const preGF = [
+  { q: "Quick one… do you believe people meet for a reason?", o: ["Yes 😌", "Sometimes", "Not really"] },
+  { q: "Do you think vibes can speak louder than words?", o: ["Definitely", "A little", "Nope"] },
+  { q: "Do you like surprises… even the small ones?", o: ["I love them", "Depends", "Not really"] },
+  { q: "Have you ever met someone who made ordinary days feel lighter?", o: ["Yes", "Maybe", "Not yet"] },
+  { q: "If a person consistently makes you smile… does that mean something?", o: ["Yes", "Could be", "No"] },
+  { q: "Okay… last warm-up 😅 Love should be chosen on purpose?", o: ["Yes", "Maybe", "No"] }
 ];
 
-// Questions after GF yes (lead to Valentine)
-const postGFQuestions = [
-  "Be honest… do you prefer cute moments or big romantic moments?",
-  "Would you say you’re more ‘planner’ or ‘go with the flow’?",
-  "If I planned a sweet day for you… would you let me?",
-  "Do you know what date is coming up soon? 👀",
-  "Last one… do you think a Valentine should feel personal?"
+const postGF = [
+  { q: "Be honest… cute moments or big romantic moments?", o: ["Cute 😭", "Big romantic", "Both"] },
+  { q: "Are you more ‘planner’ or ‘go with the flow’?", o: ["Planner", "Flow", "Both"] },
+  { q: "If I planned a sweet day… would you allow me?", o: ["Yes", "Maybe", "Stop 😭 (but yes)"] },
+  { q: "Do you know what date is coming up soon? 👀", o: ["Yes", "Not sure", "Tell me"] },
+  { q: "Valentine should feel personal, right?", o: ["Yes", "Somewhat", "Not important"] }
 ];
 
-const gfNoMessages = [
-  "Wait 😭… don’t run yet. I just need you to know… you’ve been a bright part of my days.",
-  "I’m serious, Kimmy… you’ve brought peace to my mind and softness to my heart.",
+// Romantic reactions after an option click
+const reacts = [
+  "Noted 😌… I like how your mind works.",
+  "That answer? Cute. I’m smiling fr.",
+  "Okay okay… I hear you. And I like you.",
+  "You’re making this hard to act normal 😭❤️",
+  "Mmh… that’s why I mess with you."
+];
+
+// No-click lines (up to 4)
+const gfNo = [
+  "Wait 😭… don’t run yet. I just need you to know you’ve been a bright part of my days.",
+  "Kimmy… you’ve brought peace to my mind and softness to my heart.",
   "If you’re unsure, I get it… but I’m asking with genuine intentions. No games.",
-  "Okay… last time I’ll ask with my full heart… because you truly matter to me."
+  "Last time… with my full heart… because you truly matter to me."
 ];
 
-const valNoMessages = [
-  "Eii 🙈… don’t break my heart like that. I wanted this day to feel like ‘us’.",
-  "Kimmy… you make love feel real — and I just wanted one day to celebrate you properly.",
-  "If you’re thinking about it… I respect it. I’m just hoping you’ll say yes… to me, again.",
-  "Alright… last one… because you’re my favorite thought, and I wanted that day to hold your name."
+const valNo = [
+  "Eii 🙈… don’t break my heart like that. I wanted that day to feel like ‘us’.",
+  "You make love feel real — I just wanted one day to celebrate you properly.",
+  "If you’re thinking about it… I respect it. I’m just hoping you’ll say yes… to me again.",
+  "Last time… because you’re my favorite thought, and I wanted that day to hold your name."
 ];
 
 // =========================
-// STATE
+// STATE / ELEMENTS
 // =========================
 const app = document.getElementById("app");
 const bgm = document.getElementById("bgm");
+const musicChip = document.getElementById("musicChip");
+const musicChipText = document.getElementById("musicChipText");
+const sparkles = document.getElementById("sparkles");
+
 bgm.src = AUDIO_SRC;
 
-let qIndex = 0;
+let stage = "login"; // login | preGF | askGF | postGF | askVal | end
+let idx = 0;
 let gfNoCount = 0;
 let valNoCount = 0;
 
@@ -52,24 +66,14 @@ let valNoCount = 0;
 // HELPERS
 // =========================
 function render(html){
-  app.classList.remove("fade");
-  void app.offsetWidth; // reflow
-  app.innerHTML = html;
   app.classList.add("fade");
+  app.innerHTML = html;
 }
 
-function safePlayMusic(){
-  bgm.volume = 0.85;
-  const p = bgm.play();
-  if (p && typeof p.catch === "function") {
-    p.catch(() => {});
-  }
-}
-
-function topHeader(title, subtitle){
+function header(title, subtitle){
   return `
     <div class="brand">
-      <div class="badge"><span>❤️</span></div>
+      <div class="badge"><span>💗</span></div>
       <div>
         <h1>${title}</h1>
         <div class="sub">${subtitle}</div>
@@ -78,145 +82,225 @@ function topHeader(title, subtitle){
   `;
 }
 
+function pick(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+async function startMusic(){
+  try{
+    // Re-assert (helps on some phones / GitHub Pages)
+    if (!bgm.src.includes(AUDIO_SRC)) bgm.src = AUDIO_SRC;
+    bgm.muted = false;
+    bgm.volume = 0.9;
+    bgm.loop = true;
+    bgm.load();
+    await bgm.play();
+    musicChipText.textContent = "Pause";
+  }catch(e){
+    // If autoplay fails, user can tap the music chip.
+    musicChipText.textContent = "Play";
+  }
+}
+
+function toggleMusic(){
+  if (bgm.paused){
+    startMusic();
+  } else {
+    bgm.pause();
+    musicChipText.textContent = "Play";
+  }
+}
+
+function setProgress(current, total){
+  const pct = Math.round((current / total) * 100);
+  const el = document.getElementById("progFill");
+  if (el) el.style.width = pct + "%";
+}
+
+function confettiBurst(){
+  const pieces = 38;
+  for (let i=0;i<pieces;i++){
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random()*100 + "vw";
+    c.style.background = `hsla(${Math.random()*360}, 90%, 70%, .95)`;
+    c.style.transform = `translateY(0) rotate(${Math.random()*180}deg)`;
+    c.style.animationDuration = (0.9 + Math.random()*0.8) + "s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 1600);
+  }
+}
+
+function spawnSparkles(){
+  // just once
+  for(let i=0;i<28;i++){
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = Math.random()*100 + "vw";
+    s.style.top = Math.random()*100 + "vh";
+    s.style.animationDelay = (Math.random()*2.6) + "s";
+    s.style.opacity = (0.35 + Math.random()*0.55).toFixed(2);
+    sparkles.appendChild(s);
+  }
+}
+
 // =========================
 // SCREENS
 // =========================
 function screenLogin(){
+  stage = "login";
   render(`
-    ${topHeader("Private little corner", "Only one person in the world is meant to enter this.")}
+    ${header("Private little corner", "Only one person is meant to unlock this 😌")}
     <div class="divider"></div>
 
-    <label for="user">Username</label>
-    <input id="user" type="text" placeholder="Enter username" autocomplete="off" />
+    <label for="u">Username</label>
+    <input id="u" placeholder="Enter username" autocomplete="off" />
     <span class="hint">Hint: Our baby’s name ❤️</span>
 
-    <label for="pass">Password</label>
-    <input id="pass" type="password" placeholder="Anything works 😌" autocomplete="off" />
+    <label for="p">Password</label>
+    <input id="p" type="password" placeholder="Anything works 😌" autocomplete="off" />
 
     <div class="actions">
-      <button id="loginBtn">Login (starts music 🎶)</button>
+      <button id="login" class="btn-yes">Login (starts music 🎶)</button>
     </div>
 
     <div class="tiny">
-      Soft reminder: this is a safe space — no pressure, just something sweet I made for you.
+      If music doesn’t start immediately, tap the 🎶 button on the bottom right.
+      (Phones be strict sometimes.)
     </div>
-
-    <div class="footer-note">Made with love.</div>
   `);
 
-  document.getElementById("loginBtn").addEventListener("click", () => {
-    const user = (document.getElementById("user").value || "").trim().toLowerCase();
-    if (user !== USERNAME_REQUIRED){
+  document.getElementById("login").addEventListener("click", async () => {
+    const u = (document.getElementById("u").value || "").trim().toLowerCase();
+
+    if (u !== USERNAME_REQUIRED){
       app.classList.remove("shake");
       void app.offsetWidth;
       app.classList.add("shake");
-
-      const u = document.getElementById("user");
-      u.focus();
-      u.value = "";
-      u.placeholder = "Try again… (hint is right there 😅)";
+      document.getElementById("u").value = "";
+      document.getElementById("u").placeholder = "Try again… the hint is right there 😭";
       return;
     }
-    safePlayMusic();
-    qIndex = 0;
+
+    // Start music in the same click event
+    await startMusic();
+    idx = 0;
     screenIntro();
   });
 }
 
 function screenIntro(){
   render(`
-    ${topHeader("Hi Kimmy 👋🏽", "I made this like a tiny quiz… but it’s really just my heart being brave.")}
-    <div class="pill">Part 1: Just a few questions</div>
+    ${header("Hi Kimmy 👋🏽", "It starts like a tiny quiz… then it gets a little real.")}
+    <div class="pill">✨ Part 1 • Questions</div>
 
     <div class="type">
-Answer in your head, out loud, or just smile — either way… I’ll be happy you’re here.
+Tap answers. No pressure.
+I just want you to feel how softly you live in my mind.
     </div>
 
     <div class="actions">
-      <button id="startBtn" class="btn-yes">Start</button>
-    </div>
-
-    <div class="tiny">
-      (If the music didn’t start, tap the button again. Some phones are dramatic 🙃)
+      <button id="go" class="btn-yes">Start</button>
+      <button id="play" class="btn-no">Tap to play music</button>
     </div>
   `);
 
-  document.getElementById("startBtn").addEventListener("click", () => {
-    safePlayMusic();
-    screenQuestion(preGFQuestions);
+  document.getElementById("go").addEventListener("click", () => {
+    stage = "preGF";
+    idx = 0;
+    screenQuestion(preGF);
   });
+
+  document.getElementById("play").addEventListener("click", () => startMusic());
 }
 
 function screenQuestion(list){
-  const isPre = (list === preGFQuestions);
   const total = list.length;
+  const item = list[idx];
 
   render(`
-    ${topHeader(isPre ? "Tiny Questions" : "One more small set…", "Just go with the flow 😌")}
-    <div class="pill">${isPre ? "Warm up" : "Part 2"} • Question ${qIndex + 1} of ${total}</div>
+    ${header("Quick Questions", "Just pick what feels true 😌")}
+    <div class="pill">💞 Question ${idx + 1} of ${total}</div>
 
-    <div class="big-question">${list[qIndex]}</div>
+    <div class="progress"><div id="progFill"></div></div>
 
-    <div class="actions">
-      <button id="nextBtn" class="btn-yes">Next</button>
+    <div class="big-question">${item.q}</div>
+
+    <div class="options">
+      ${item.o.map((x)=>`<button class="option-btn">${x}</button>`).join("")}
     </div>
 
-    <div class="tiny">
-      I know it’s simple… but I wanted you to feel how gently you’ve been sitting in my mind lately.
-    </div>
+    <div class="reply" id="reply" style="display:none;"></div>
+
+    <div class="tiny">Your answers are cute, by the way.</div>
   `);
 
-  document.getElementById("nextBtn").addEventListener("click", () => {
-    qIndex++;
-    if (qIndex < total){
-      screenQuestion(list);
-      return;
-    }
+  setProgress(idx, total);
 
-    if (isPre){
-      gfNoCount = 0;
-      screenAskGF();
-    } else {
-      valNoCount = 0;
-      screenAskValentine();
-    }
+  const reply = document.getElementById("reply");
+  const btns = [...document.querySelectorAll(".option-btn")];
+
+  btns.forEach(b => {
+    b.addEventListener("click", () => {
+      reply.style.display = "block";
+      reply.textContent = pick(reacts);
+
+      setTimeout(() => {
+        idx++;
+        if (idx < total){
+          screenQuestion(list);
+          return;
+        }
+
+        // Move to next stage
+        if (list === preGF){
+          gfNoCount = 0;
+          screenAskGF();
+        } else {
+          valNoCount = 0;
+          screenAskValentine();
+        }
+      }, 650);
+    });
   });
 }
 
 function screenAskGF(){
+  stage = "askGF";
   render(`
-    ${topHeader("Okay… real moment 😮‍💨", "Somewhere between your laugh and your kindness… I started feeling at home.")}
+    ${header("Okay… real moment 😮‍💨", "Somewhere between your laugh and your kindness… I felt at home.")}
     <div class="divider"></div>
 
     <div class="big-question">Will you be my girlfriend? 💍❤️</div>
 
     <div class="actions">
-      <button id="yesGF" class="btn-yes">Yes</button>
-      <button id="noGF" class="btn-no">No</button>
+      <button id="yes" class="btn-yes">Yes</button>
+      <button id="no" class="btn-no">No</button>
     </div>
 
-    <div id="msg" class="tiny"></div>
+    <div class="tiny" id="msg"></div>
   `);
 
   const msg = document.getElementById("msg");
 
-  document.getElementById("yesGF").addEventListener("click", () => {
+  document.getElementById("yes").addEventListener("click", () => {
+    confettiBurst();
     screenGFYesPoem();
   });
 
-  document.getElementById("noGF").addEventListener("click", () => {
+  document.getElementById("no").addEventListener("click", () => {
     if (gfNoCount < 4){
-      msg.textContent = gfNoMessages[gfNoCount] || "I hear you…";
+      msg.textContent = gfNo[gfNoCount];
       gfNoCount++;
     } else {
-      msg.textContent = "I won’t push you. Thank you for being honest. 🌷";
+      msg.textContent = "I won’t pressure you. Thank you for being honest. 🌷";
     }
   });
 }
 
 function screenGFYesPoem(){
   render(`
-    ${topHeader("You just made me breathe easier 😭❤️", "Okay… let me say this properly.")}
+    ${header("You just made me breathe easier 😭❤️", "Let me say this properly…")}
     <div class="divider"></div>
 
     <div class="type">
@@ -225,49 +309,57 @@ you changed my world in a single heartbeat.
 
 You turned my overthinking into calm,
 my ordinary into beautiful,
-my days into something I actually look forward to.
+my days into something I look forward to.
 
 If happiness had a name…
 it would sound like yours.
     </div>
 
     <div class="actions">
-      <button id="continueAfterGF" class="btn-yes">Continue</button>
+      <button id="cont" class="btn-yes">Continue</button>
+      <button id="play2" class="btn-no">Tap to play music</button>
     </div>
 
-    <div class="tiny">(You look good as my girlfriend, by the way 😌)</div>
+    <div class="tiny">
+      Okay girlfriend 😌… round two is coming.
+    </div>
   `);
 
-  document.getElementById("continueAfterGF").addEventListener("click", () => {
-    qIndex = 0;
-    screenQuestion(postGFQuestions);
+  document.getElementById("cont").addEventListener("click", () => {
+    stage = "postGF";
+    idx = 0;
+    screenQuestion(postGF);
   });
+
+  document.getElementById("play2").addEventListener("click", () => startMusic());
 }
 
 function screenAskValentine(){
+  stage = "askVal";
   render(`
-    ${topHeader("Now… my heart wants one more thing", "Not because of the date — but because of you.")}
+    ${header("One more thing…", "Not because of the date — but because of you.")}
     <div class="divider"></div>
 
     <div class="big-question">Will you be my Valentine? 💘</div>
 
     <div class="actions">
-      <button id="yesVal" class="btn-yes">Yes</button>
-      <button id="noVal" class="btn-no">No</button>
+      <button id="yesV" class="btn-yes">Yes</button>
+      <button id="noV" class="btn-no">No</button>
     </div>
 
-    <div id="vmsg" class="tiny"></div>
+    <div class="tiny" id="vmsg"></div>
   `);
 
   const vmsg = document.getElementById("vmsg");
 
-  document.getElementById("yesVal").addEventListener("click", () => {
-    screenValentineYesEnding();
+  document.getElementById("yesV").addEventListener("click", () => {
+    confettiBurst();
+    screenValentineEnding();
   });
 
-  document.getElementById("noVal").addEventListener("click", () => {
+  document.getElementById("noV").addEventListener("click", () => {
     if (valNoCount < 4){
-      vmsg.textContent = valNoMessages[valNoCount] || "I hear you…";
+      vmsg.textContent = valNo[valNoCount];
       valNoCount++;
     } else {
       vmsg.textContent = "I won’t pressure you. Still… thank you for being here. 🌷";
@@ -275,9 +367,10 @@ function screenAskValentine(){
   });
 }
 
-function screenValentineYesEnding(){
+function screenValentineEnding(){
+  stage = "end";
   render(`
-    ${topHeader("You’re my favorite yes 💖", "Let me leave you with a little love note…")}
+    ${header("You’re my favorite yes 💖", "A little love note, then you choose…")}
     <div class="divider"></div>
 
     <div class="type">
@@ -288,7 +381,7 @@ But if I get to call you my Valentine…
 then February becomes sacred —
 because it holds your name.
 
-So… tell me, baby…
+So tell me, baby…
 what would you prefer? 😌
     </div>
 
@@ -298,45 +391,31 @@ what would you prefer? 😌
       <button class="btn-yes wide" data-choice="Something simple & meaningful">Something simple & meaningful 🌹</button>
     </div>
 
-    <div class="tiny" id="choiceOut"></div>
-    <div class="footer-note">This page is cute. But you… you’re the real masterpiece.</div>
+    <div class="reply" id="out" style="display:none;"></div>
+
+    <div class="tiny">
+      (You can screenshot this and send it back to me 😭❤️)
+    </div>
   `);
 
-  const out = document.getElementById("choiceOut");
+  const out = document.getElementById("out");
   document.querySelectorAll("[data-choice]").forEach(btn => {
     btn.addEventListener("click", () => {
+      out.style.display = "block";
       out.textContent = `Noted 😌 → “${btn.getAttribute("data-choice")}”. Now come here and let me spoil you properly.`;
     });
   });
 }
 
 // =========================
-// HEARTS BACKGROUND
+// MUSIC CHIP
 // =========================
-function spawnHearts(){
-  const container = document.getElementById("hearts");
-  const count = 18;
+musicChip.addEventListener("click", () => toggleMusic());
+bgm.addEventListener("play", () => (musicChipText.textContent = "Pause"));
+bgm.addEventListener("pause", () => (musicChipText.textContent = "Play"));
 
-  for(let i=0;i<count;i++){
-    const h = document.createElement("div");
-    h.className = "heart";
-
-    const left = Math.random()*100;
-    const size = 10 + Math.random()*16;
-    const duration = 10 + Math.random()*14;
-    const delay = Math.random()*8;
-
-    h.style.left = left + "vw";
-    h.style.width = size + "px";
-    h.style.height = size + "px";
-    h.style.animationDuration = duration + "s";
-    h.style.animationDelay = delay + "s";
-    h.style.opacity = (0.20 + Math.random()*0.35).toFixed(2);
-
-    container.appendChild(h);
-  }
-}
-
-// Boot
-spawnHearts();
+// =========================
+// BOOT
+// =========================
+spawnSparkles();
 screenLogin();
