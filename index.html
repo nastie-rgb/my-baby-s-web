@@ -1,24 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>For Naima ❤️</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Tashia ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="bg"></div>
 
-  <main class="wrap">
-    <section class="card" id="app"></section>
-  </main>
+    <div id="login-screen">
+        <div class="login-box">
+            <h1>❤️ LOCKED ❤️</h1>
+            <p>Enter the magic word (Her Name)</p>
+            <input type="text" id="username" placeholder="Name...">
+            <button onclick="attemptLogin()">UNLOCK HEART</button>
+            <p id="error-msg" class="hidden">Not quite. Try 'Tashia' 😉</p>
+        </div>
+    </div>
 
-  <button class="musicChip" id="musicChip" type="button">
-    🎶 <span id="musicState">Play</span>
-  </button>
+    <div id="main-content" class="hidden">
+        <h2 class="main-title">10 Reasons Why I Love You</h2>
+        <div class="envelope-grid" id="grid">
+            </div>
+    </div>
 
-  <audio id="bgm" preload="auto" playsinline loop></audio>
+    <div id="letter-modal" class="hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeLetter()">&times;</span>
+            <img id="modal-img" src="" alt="Us">
+            <p id="modal-text"></p>
+        </div>
+    </div>
 
-  <script src="script.js"></script>
+    <audio id="bg-music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
 </body>
 </html>
