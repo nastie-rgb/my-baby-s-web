@@ -1,9 +1,9 @@
 // CONFIGURATION
-// Change this to the exact name you want her to type to unlock it
-const correctName = "Kimmy"; 
+// The Password is now "Tashia"
+const correctName = "Tashia"; 
 
 // THE CONTENT 
-// I updated the filenames to match "image 1.jpeg", "image 2.jpeg", etc.
+// Filenames match your screenshot: "image 1.jpeg" (with space)
 const contentData = [
     { img: "image 1.jpeg", text: "It started with a hello, but it ended up being my forever. ❤️" },
     { img: "image 2.jpeg", text: "Your smile is literally the most beautiful thing I've ever seen." },
@@ -25,7 +25,7 @@ function attemptLogin() {
     const mainContent = document.getElementById("main-content");
     const music = document.getElementById("bg-music");
 
-    // Check if the name matches (Case Insensitive)
+    // Check if the input is "Tashia" (Case Insensitive)
     if (input.toLowerCase().trim() === correctName.toLowerCase()) {
         
         // 1. TRY TO PLAY MUSIC
@@ -93,7 +93,7 @@ document.getElementById("username").addEventListener("keypress", function(e) {
     if (e.key === "Enter") attemptLogin();
 });
 
-// SHAKE ANIMATION CSS INJECTION (Just in case style.css misses it)
+// SHAKE ANIMATION CSS INJECTION
 const style = document.createElement('style');
 style.innerHTML = `
 @keyframes shake {
