@@ -1,198 +1,160 @@
-:root{
-  --pink1:#ff2d55;
-  --pink2:#ff6aa6;
-  --pink3:#ffd1e6;
-
-  --card: rgba(255,255,255,.16);
-  --stroke: rgba(255,255,255,.26);
-  --text: #fff;
-  --muted: rgba(255,255,255,.80);
-
-  --shadow: 0 22px 70px rgba(0,0,0,.25);
-  --btn: rgba(255,255,255,.18);
-  --btnHover: rgba(255,255,255,.26);
-  --no: rgba(0,0,0,.14);
+/* --- THEME SETTINGS --- */
+:root {
+    --bg-color: #2b0000; /* Very dark red */
+    --envelope-color: #8b0000; /* Blood red */
+    --accent-red: #ff0000; /* Bright red */
+    --paper-color: #fff5e6; /* Old paper look */
+    --text-color: #4a0000;
 }
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
-
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  color:var(--text);
-  overflow-x:hidden;
+body {
+    background-color: var(--bg-color);
+    margin: 0;
+    font-family: 'Courier Prime', monospace; /* Old school typewriter look */
+    color: white;
+    text-align: center;
 }
 
-.bg{
-  position:fixed; inset:0; z-index:-1;
-  background:
-    radial-gradient(900px 600px at 15% 15%, rgba(255,255,255,.20), transparent 60%),
-    radial-gradient(700px 520px at 85% 10%, rgba(255,255,255,.12), transparent 55%),
-    linear-gradient(135deg, var(--pink1), var(--pink2), var(--pink3));
-  filter: saturate(1.08);
+/* --- LOGIN SCREEN --- */
+#login-screen {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    background: radial-gradient(circle, #800000 0%, #000000 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
 }
 
-.wrap{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:22px;
+.login-box {
+    border: 4px double var(--accent-red);
+    padding: 40px;
+    background: black;
 }
 
-.card{
-  width:min(560px, 100%);
-  background: var(--card);
-  border: 1px solid var(--stroke);
-  border-radius: 26px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 22px;
-  position:relative;
+input {
+    padding: 10px;
+    background: #2b0000;
+    border: 1px solid var(--accent-red);
+    color: white;
+    font-family: 'Courier Prime', monospace;
 }
 
-.brand{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  margin-bottom: 10px;
-}
-.badge{
-  width:48px; height:48px;
-  border-radius:18px;
-  display:grid; place-items:center;
-  background: rgba(255,255,255,.16);
-  border: 1px solid rgba(255,255,255,.24);
-}
-.badge span{ font-size:20px; }
-
-h1{ margin:0; font-size:22px; }
-.sub{ margin-top:6px; color:var(--muted); font-size:14.5px; line-height:1.55; }
-
-.divider{
-  height:1px;
-  background: rgba(255,255,255,.20);
-  margin: 14px 0 16px;
+button {
+    background: var(--accent-red);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Courier Prime', monospace;
+    margin-top: 10px;
 }
 
-label{
-  display:block;
-  font-size: 12.5px;
-  color: rgba(255,255,255,.92);
-  margin: 10px 0 6px;
+/* --- ENVELOPE GRID --- */
+.hidden { display: none !important; }
+
+#main-content {
+    padding: 20px;
+    min-height: 100vh;
 }
 
-.hint{
-  display:block;
-  font-size: 12px;
-  color: rgba(255,255,255,.78);
-  margin-top: 6px;
+.main-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3rem;
+    color: var(--accent-red);
+    text-shadow: 0 0 10px #ff9999;
 }
 
-input{
-  width:100%;
-  padding: 12px 12px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.26);
-  background: rgba(255,255,255,.10);
-  color:#fff;
-  outline:none;
-  font-size:15px;
-}
-input::placeholder{ color: rgba(255,255,255,.70); }
-
-.actions{
-  display:flex;
-  gap:12px;
-  margin-top: 14px;
+.envelope-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 50px;
 }
 
-button{
-  appearance:none;
-  border:none;
-  cursor:pointer;
-  border-radius: 18px;
-  padding: 12px 14px;
-  font-weight: 850;
-  color:#fff;
-  background: var(--btn);
-  border: 1px solid rgba(255,255,255,.25);
-  transition: transform .12s ease, background .12s ease;
-  width:100%;
-}
-button:hover{ background: var(--btnHover); transform: translateY(-1px); }
-button:active{ transform: translateY(0) scale(.99); }
-
-.btn-no{ background: var(--no); }
-
-.big{
-  font-size: 18px;
-  line-height:1.55;
-  margin: 10px 0 10px;
+/* THE ENVELOPE DESIGN */
+.envelope {
+    background: var(--envelope-color);
+    height: 120px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #5a0000;
+    transition: transform 0.3s;
 }
 
-.small{
-  margin-top: 10px;
-  color: rgba(255,255,255,.80);
-  font-size: 12.5px;
-  line-height:1.55;
+.envelope:hover {
+    transform: scale(1.1) rotate(-5deg);
+    background: var(--accent-red);
 }
 
-.reply{
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.10);
-  color: rgba(255,255,255,.90);
-  line-height: 1.55;
-  font-size: 13.5px;
+/* Creates the "Triangle" flap of the envelope */
+.envelope::before {
+    content: "💌";
+    font-size: 3rem;
 }
 
-.options{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:10px;
-  margin-top: 12px;
-}
-.option-btn{
-  text-align:left;
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.24);
+.envelope-number {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    font-size: 0.8rem;
+    opacity: 0.7;
 }
 
-.fade{ animation: fadeIn .35s ease both; }
-@keyframes fadeIn{
-  from{ opacity:0; transform: translateY(8px); }
-  to{ opacity:1; transform: translateY(0); }
+/* --- THE POPUP MODAL (THE LETTER) --- */
+#letter-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
 }
 
-.shake{ animation: shake .35s ease both; }
-@keyframes shake{
-  0%{ transform: translateX(0); }
-  25%{ transform: translateX(-7px); }
-  50%{ transform: translateX(7px); }
-  75%{ transform: translateX(-4px); }
-  100%{ transform: translateX(0); }
+.modal-content {
+    background: var(--paper-color);
+    color: var(--text-color);
+    padding: 20px;
+    max-width: 90%;
+    width: 400px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px var(--accent-red);
+    position: relative;
+    transform: rotate(-2deg); /* Looks like a tossed letter */
 }
 
-.musicChip{
-  position: fixed;
-  right: 14px;
-  bottom: 14px;
-  z-index: 50;
-  width:auto;
-  padding: 10px 12px;
-  border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.16);
-  background: rgba(0,0,0,.16);
-  border: 1px solid rgba(255,255,255,.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  display:flex;
-  gap:8px;
-  align-items:center;
-  font-weight:900;
+#modal-img {
+    width: 100%;
+    border: 5px solid white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    margin-bottom: 15px;
+}
+
+#modal-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    font-weight: bold;
+}
+
+.close-btn {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: var(--accent-red);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    line-height: 30px;
+    cursor: pointer;
+    font-weight: bold;
 }
